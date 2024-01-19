@@ -2,7 +2,7 @@
 
 namespace AutoInvest.Domain.Models
 {
-    public class Vehicle
+    public class Vehicle:BaseEntity
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; }

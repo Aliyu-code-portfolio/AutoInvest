@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AutoInvest.Domain.Models
 {
-    public class Address
+    public class Address:BaseEntity
     {
         public string Id { get; set; } = Guid.NewGuid().ToString(); 
         public string HouseNumber { get; set; }
