@@ -4,7 +4,6 @@ namespace AutoInvest.Domain.Models
 {
     public class Vehicle:BaseEntity
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; }
         public VehicleModel Model { get; set; }
         public Condition Condition { get; set; }

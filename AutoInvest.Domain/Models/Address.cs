@@ -8,7 +8,6 @@ namespace AutoInvest.Domain.Models
 {
     public class Address:BaseEntity
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString(); 
         public string HouseNumber { get; set; }
         public string StreetName { get; set; }
         public string City { get; set; }

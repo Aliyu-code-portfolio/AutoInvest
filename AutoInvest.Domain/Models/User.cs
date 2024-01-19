@@ -1,8 +1,9 @@
 ﻿using AutoInvest.Domain.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace AutoInvest.Domain.Models
 {
-    public class User
+    public class User:IdentityUser
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -11,8 +12,7 @@ namespace AutoInvest.Domain.Models
         public bool IsVerified { get; set; }
         public string AddressId { get; set; } = "";
         public virtual Address? Address { get; set; }
-        public string ReviewId { get; set; } = "";
-        public Review ?Review { get; set; }
+       
 
         // need review, payment, sale, Media, Delivery, referral models to the project
     }
