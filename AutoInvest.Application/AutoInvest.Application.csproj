@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Implementation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutoInvest.Infrastructure\AutoInvest.Infrastructure.csproj" />
+    <ProjectReference Include="..\AutoInvest.Shared\AutoInvest.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

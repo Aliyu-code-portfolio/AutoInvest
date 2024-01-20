@@ -1,6 +1,6 @@
 ﻿namespace AutoInvest.Domain.Models
 {
-    public class Sales:BaseEntity
+    public class Sale:BaseEntity
     {
         public string VehicleId { get; set; }
         public string ShopId { get; set; }
