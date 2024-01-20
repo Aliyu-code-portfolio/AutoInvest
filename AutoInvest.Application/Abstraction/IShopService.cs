@@ -1,14 +1,16 @@
-﻿using AutoInvest.Domain.Models;
+﻿
+
+using AutoInvest.Shared.DTO.Request;
 using AutoInvest.Shared.DTO.Response;
 
 namespace AutoInvest.Application.Abstraction
 {
     public interface IShopService
     {
-        Task<Shop> GetAllShop(ShopResponseDto shopResponseDto);
-        Task<Shop> GetShopById(ShopResponseDto shopResponseDto);
-        Task CreateShopAsync(ShopResponseDto shopResponseDto);
-        void UpdateShop(ShopResponseDto shopResponseDto);
-        void DeleteShop(ShopResponseDto shopResponseDto);
+        Task<IEnumerable<ShopResponseDto>> GetAllShop();
+        Task<ShopResponseDto> GetShopById(string shopId);
+        Task<ShopResponseDto> CreateShopAsync(string creatorId, ShopRequestDto shopRequestDto);
+        Task UpdateShop(ShopRequestDto shopRequestDto);
+        Task DeleteShop(string shopId);
     }
 }

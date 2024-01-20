@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AutoInvest.Domain\AutoInvest.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
