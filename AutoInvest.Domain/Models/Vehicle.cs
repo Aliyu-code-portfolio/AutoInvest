@@ -10,6 +10,8 @@ namespace AutoInvest.Domain.Models
         public double KilometerCovered { get; set; }
         public decimal Price { get; set; }
         public string ShopId { get; set; }
+        public string MediaId { get; set; }
         public virtual Shop? Shop { get; set; }
+        public virtual ICollection<Media>? Medias { get; set; }
     }
 }

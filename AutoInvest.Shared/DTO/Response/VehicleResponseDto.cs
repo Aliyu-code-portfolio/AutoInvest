@@ -1,9 +1,4 @@
 ﻿using AutoInvest.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoInvest.Shared.DTO.Response
 {
@@ -16,5 +11,6 @@ namespace AutoInvest.Shared.DTO.Response
         public double KilometerCovered { get; init; }
         public decimal Price { get; init; }
         public string ShopId { get; init; }
+        public virtual ICollection<MediaResponseDto>? Medias { get; init; }
     }
 }
