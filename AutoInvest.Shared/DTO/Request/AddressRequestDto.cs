@@ -9,7 +9,7 @@ namespace AutoInvest.Shared.DTO.Request
         public string City { get; init; }
         public string State { get; init; }
         public string Country { get; init; }
-        public UserType UserType { get; init; }
+        //public UserType UserType { get; init; }
     }
 }
 

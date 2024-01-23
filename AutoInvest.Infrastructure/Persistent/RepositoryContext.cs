@@ -9,6 +9,10 @@ namespace AutoInvest.Infrastructure.Persistent
         {
             
         }
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Properties<Decimal>().HaveColumnType("money");
+        }
         public DbSet<User> Users { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Shop> Shops { get; set; }

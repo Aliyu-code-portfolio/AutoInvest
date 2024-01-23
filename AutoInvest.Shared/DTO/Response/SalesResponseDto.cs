@@ -4,6 +4,7 @@ namespace AutoInvest.Shared.DTO.Response
 {
     public record SalesResponseDto
     {
+        public string Id { get; init; }
         public string VehicleId { get; init; }
         public string ShopId { get; init; }
         public VehicleModel VehicleModel { get; init; }
