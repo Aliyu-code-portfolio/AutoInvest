@@ -10,7 +10,7 @@ namespace AutoInvest.Domain.Models
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public DateTime DateCreated { get; set; } = DateTime.UtcNow.AddHours(1);
-        public DateTime? ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }= DateTime.UtcNow.AddHours(1);
         public string CreatorId { get; set; }
     }
 }

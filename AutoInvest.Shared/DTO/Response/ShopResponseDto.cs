@@ -5,6 +5,7 @@
         public string Id { get; init; }
         public string Name { get; init; }
         public string Description { get; init; }
-        public string CompanyName { get; set; }
+        public string CompanyName { get; init; }
+        public bool IsVerified { get; init; }
     }
 }
