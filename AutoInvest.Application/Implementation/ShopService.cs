@@ -27,6 +27,7 @@ namespace AutoInvest.Application.Implementation
         public async Task<StandardResponse<ShopResponseDto>> CreateShopAsync(string creatorId, ShopRequestDto shopRequestDto)
         {
             var shop = _mapper.Map<Shop>(shopRequestDto);
+            shop.CreatorId = creatorId;
             await _repositoryBase.CreateAsync(shop);
             await _repositoryBase.SaveChangesAsync();
             var shopResponse = _mapper.Map<ShopResponseDto>(shop);
@@ -64,13 +65,14 @@ namespace AutoInvest.Application.Implementation
             return StandardResponse<ShopResponseDto>.Succeeded("Shops retrieved successfully", shopDto, 200);
         }
 
-        public async Task UpdateShop( string shopId, ShopRequestDto shopRequestDto)
+        public async Task<StandardResponse<string>> UpdateShop( string shopId, ShopRequestDto shopRequestDto)
         {
             var shop = await _repositoryBase.FindByCondition(trackChanges: true, expression: x => x.Id == shopId).SingleOrDefaultAsync();
             if(shop == null) 
-            { return; }
+            { return StandardResponse<string>.Failed("Shop not found", 404); }
             _mapper.Map(shop, shopRequestDto);
             await _repositoryBase.SaveChangesAsync();
+            return StandardResponse<string>.Succeeded("Shop successfully retrieved", "Success", 200);
         }
     }
 }

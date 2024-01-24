@@ -1,4 +1,6 @@
 using AutoInvest.API.Extensions;
+using AutoInvest.API.Middleware;
+using AutoInvest.Application.Mapping;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +8,8 @@ builder.Host.UseSerilog((context, loggerConfig)=>loggerConfig.ReadFrom.Configura
 // Add services to the container.
 builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.ConfigureRepositoryBase();
+builder.Services.ConfigureApplicationServices();
+builder.Services.AddAutoMapper(typeof(ProfileMapping));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -14,6 +18,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.ConfigureExceptionHandler();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -26,5 +31,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+Log.Logger.Information("Application is running");
 app.Run();
+

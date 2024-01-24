@@ -1,4 +1,6 @@
-﻿using AutoInvest.Infrastructure.Persistent;
+﻿using AutoInvest.Application.Abstraction;
+using AutoInvest.Application.Implementation;
+using AutoInvest.Infrastructure.Persistent;
 using AutoInvest.Infrastructure.Repository.Abstraction;
 using AutoInvest.Infrastructure.Repository.Implementation;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,9 @@ namespace AutoInvest.API.Extensions
         {
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
         }
-
+        public static void ConfigureApplicationServices(this IServiceCollection services)
+        {
+            services.AddScoped<IShopService, ShopService>();
+        }
     }
 }
