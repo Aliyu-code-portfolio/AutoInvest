@@ -10,7 +10,7 @@ namespace AutoInvest.Application.Abstraction
         Task<StandardResponse<IEnumerable<ShopResponseDto>>> GetAllShop();
         Task<StandardResponse<ShopResponseDto>> GetShopById(string shopId);
         Task<StandardResponse<ShopResponseDto>> CreateShopAsync(string creatorId, ShopRequestDto shopRequestDto);
-        Task UpdateShop(string shopId, ShopRequestDto shopRequestDto);
+        Task<StandardResponse<string>> UpdateShop(string shopId, ShopRequestDto shopRequestDto);
         Task<StandardResponse<string>> DeleteShop(string shopId);
     }
 }
