@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AutoInvest.API.Controllers
 {
-    [Route("api/Controller")]
+    [Route("api/[Controller]")]
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleService _vehicleService;
@@ -14,7 +14,7 @@ namespace AutoInvest.API.Controllers
             _vehicleService = vehicleService;
         }
 
-        [HttpGet("get-all-video")]
+        [HttpGet("get-all-vehicle")]
         public async Task<IActionResult> GetAllVehicle()
         {
             var result = await _vehicleService.GetAllVehicle();
