@@ -20,9 +20,9 @@ namespace AutoInvest.Application.Implementation
             this._mapper = mapper;
         }
 
-        public async  Task<StandardResponse<SalesResponseDto>>CreateSaleAsync(string creatorId, SaleRequestDto saleRequestDto)
+        public async Task<StandardResponse<SalesResponseDto>> CreateSaleAsync(string creatorId, SaleRequestDto saleRequestDto)
         {
-            
+
             var sales = _mapper.Map<Sale>(saleRequestDto);
             sales.CreatorId = creatorId;
             await _repositoryBase.CreateAsync(sales);
@@ -38,11 +38,11 @@ namespace AutoInvest.Application.Implementation
             return StandardResponse<IEnumerable<SalesResponseDto>>.Succeeded("Sales successfuly retrieved", salesDto, 200);
         }
 
-        public async Task <StandardResponse<SalesResponseDto>>GetSalesById(string saleId)
+        public async Task<StandardResponse<SalesResponseDto>> GetSalesById(string saleId)
         {
-            var sales = await _repositoryBase.FindByCondition(trackChanges:false , expression: x => x.Id == saleId).SingleOrDefaultAsync();
-            
-            if(sales == null)
+            var sales = await _repositoryBase.FindByCondition(trackChanges: false, expression: x => x.Id == saleId).SingleOrDefaultAsync();
+
+            if (sales == null)
             {
                 return StandardResponse<SalesResponseDto>.Failed("Sale was not retrieved successfully", 404);
             }
@@ -52,9 +52,9 @@ namespace AutoInvest.Application.Implementation
 
         }
 
-        public async Task <StandardResponse<string>> UpdateSale(string salesId, SaleRequestDto saleRequestDto)
+        public async Task<StandardResponse<string>> UpdateSale(string salesId, SaleRequestDto saleRequestDto)
         {
-            var sales = await _repositoryBase.FindByCondition(trackChanges:false, expression: x => x.Id == salesId).SingleOrDefaultAsync();
+            var sales = await _repositoryBase.FindByCondition(trackChanges: false, expression: x => x.Id == salesId).SingleOrDefaultAsync();
             if (sales == null)
             {
                 return StandardResponse<string>.Failed("Sales not found", 404);
@@ -65,5 +65,6 @@ namespace AutoInvest.Application.Implementation
 
         }
 
-       
+
+    }
 }
