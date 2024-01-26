@@ -22,7 +22,7 @@ namespace AutoInvest.API.Controllers
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpGet("get-media-by-Id/{Id}", Name="GetById")]
+        [HttpGet("get-media-by-Id/{Id}", Name="GetMediaById")]
         public async Task<IActionResult> GetMediaById(string Id)
         {
             var result = await _mediaService.GetMediaById(Id);

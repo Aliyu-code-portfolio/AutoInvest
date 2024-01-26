@@ -24,7 +24,7 @@ namespace AutoInvest.API.Controllers
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpGet("get-sales-by-Id/{id}", Name = "GetById")]
+        [HttpGet("get-sales-by-Id/{id}", Name = "GetSalesById")]
         public async Task<IActionResult> GetSalesById(string id)
         {
             var result = await _saleService.GetSalesById(id);

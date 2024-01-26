@@ -12,7 +12,7 @@ namespace AutoInvest.API.Extensions
         public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<RepositoryContext>(options => options
-            .UseSqlServer(configuration.GetConnectionString("AliyuLocalDB")));
+            .UseSqlServer(configuration.GetConnectionString("DESKTOP-4KR72TD\\DECAGON")));
         }
         public static void ConfigureRepositoryBase(this IServiceCollection services)
         {

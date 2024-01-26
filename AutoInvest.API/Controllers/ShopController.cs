@@ -24,7 +24,7 @@ namespace AutoInvest.API.Controllers
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpGet("get-shop-by-id/{id}",Name ="GetById")]
+        [HttpGet("get-shop-by-id/{id}",Name ="GetShopById")]
         public async Task<IActionResult> GetShopById(string id)
         {
             var result = await _shopService.GetShopById(id);
