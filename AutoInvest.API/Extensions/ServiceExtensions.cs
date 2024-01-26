@@ -21,6 +21,13 @@ namespace AutoInvest.API.Extensions
         public static void ConfigureApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IShopService, ShopService>();
+            services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<ISaleService, SaleService>();
+            services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IMediaService, MediaService>();
+            services.AddScoped<IUserService, UserService>();
         }
+        
     }
 }
