@@ -6,11 +6,6 @@ using AutoInvest.Shared.DTO.Response;
 using AutoInvest.Shared.DTO.StandardResponse;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoInvest.Application.Implementation
 {
@@ -19,6 +14,15 @@ namespace AutoInvest.Application.Implementation
     {
         private readonly IRepositoryBase<Media> _repositoryBase;
         private readonly IMapper _mapper;
+
+        public MediaService(IRepositoryBase<Media> repositoryBase, IMapper mapper)
+        {
+            _repositoryBase = repositoryBase;
+            _mapper = mapper;
+        }
+
+
+
 
         public Task<StandardResponse<MediaResponseDto>> CreateMediaAsync(string creatorId, MediaRequestDto mediaRequestDto)
         {
@@ -52,11 +56,18 @@ namespace AutoInvest.Application.Implementation
             }
             _repositoryBase.Delete(media);
             await _repositoryBase.SaveChangesAsync();
-            return StandardResponse<string>.Succeeded("Delete Successful", "Deleted");
+            return StandardResponse<string>.Succeeded("Delete Successful", "Deleted" , 200);
         }
 
-        
-
-        
+        public async Task<StandardResponse<string>> UpdateMedia(string mediaId, MediaRequestDto mediaRequestDto)
+        {
+            var media = await _repositoryBase.FindByCondition(trackChanges:false , expression: x => x.Id==mediaId).SingleOrDefaultAsync();
+            if(media == null)
+            {
+                return StandardResponse<string>.Failed("Media not found", 404);
+            }
+            _mapper.Map(media, mediaRequestDto);
+            return StandardResponse<string>.Succeeded("Media successfully updated", "Success", 200);
+        }
     }
 }

@@ -1,28 +1,30 @@
 ﻿using AutoInvest.Application.Abstraction;
 using AutoInvest.Domain.Models;
 using AutoInvest.Infrastructure.Repository.Abstraction;
-using AutoInvest.Infrastructure.Repository.Implementation;
 using AutoInvest.Shared.DTO.Request;
 using AutoInvest.Shared.DTO.Response;
 using AutoInvest.Shared.DTO.StandardResponse;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoInvest.Application.Implementation
 {
     public class SaleService : ISaleService
     {
         private readonly IRepositoryBase<Sale> _repositoryBase;
-        private readonly IMapper _mapper; 
+        private readonly IMapper _mapper;
 
-        public async  Task<StandardResponse<SalesResponseDto>>CreateSaleAsync(string shopId, SaleRequestDto saleRequestDto)
+        public SaleService(IRepositoryBase<Sale> repositoryBase, IMapper mapper)
         {
+            this._repositoryBase = repositoryBase;
+            this._mapper = mapper;
+        }
+
+        public async  Task<StandardResponse<SalesResponseDto>>CreateSaleAsync(string creatorId, SaleRequestDto saleRequestDto)
+        {
+            
             var sales = _mapper.Map<Sale>(saleRequestDto);
+            sales.CreatorId = creatorId;
             await _repositoryBase.CreateAsync(sales);
             await _repositoryBase.SaveChangesAsync();
             var salesresponse = _mapper.Map<SalesResponseDto>(sales);
@@ -50,16 +52,18 @@ namespace AutoInvest.Application.Implementation
 
         }
 
-        public async Task UpdateSale(string salesId, SalesResponseDto saleResponseDto)
+        public async Task <StandardResponse<string>> UpdateSale(string salesId, SaleRequestDto saleRequestDto)
         {
             var sales = await _repositoryBase.FindByCondition(trackChanges:false, expression: x => x.Id == salesId).SingleOrDefaultAsync();
             if (sales == null)
             {
-                return /*StandardResponse<SalesResponseDto>.Failed("Sales not found", 404)*/;
+                return StandardResponse<string>.Failed("Sales not found", 404);
             }
-            _mapper.Map<SalesResponseDto>(sales);
+            _mapper.Map<SaleRequestDto>(sales);
             await _repositoryBase.SaveChangesAsync();
+            return StandardResponse<string>.Succeeded("Sales successfully updated", "Success", 200);
 
         }
-    }
+
+       
 }

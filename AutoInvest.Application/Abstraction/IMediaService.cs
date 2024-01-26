@@ -10,5 +10,6 @@ namespace AutoInvest.Application.Abstraction
         Task<StandardResponse<MediaResponseDto>> GetMediaById(string mediaId);
         Task <StandardResponse<MediaResponseDto>> CreateMediaAsync(string creatorId, MediaRequestDto mediaRequestDto);
         Task <StandardResponse<string>>DeleteMedia(string mediaId);
+        Task<StandardResponse<string>> UpdateMedia(string mediaId, MediaRequestDto mediaRequestDto);
     }
 }

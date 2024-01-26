@@ -43,7 +43,7 @@ namespace AutoInvest.Application.Implementation
             }
             _repositoryBase.Delete(shop);
             await _repositoryBase.SaveChangesAsync();
-            return StandardResponse<string>.Succeeded("Delete Successful", "Deleted");
+            return StandardResponse<string>.Succeeded("Delete Successful", "Deleted",200);
         }
 
         public async Task<StandardResponse<IEnumerable<ShopResponseDto>>> GetAllShop()

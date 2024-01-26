@@ -1,6 +1,11 @@
 ﻿using AutoInvest.Application.Abstraction;
+using AutoInvest.Domain.Models;
+using AutoInvest.Infrastructure.Repository.Abstraction;
 using AutoInvest.Shared.DTO.Request;
 using AutoInvest.Shared.DTO.Response;
+using AutoInvest.Shared.DTO.StandardResponse;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,29 +16,69 @@ namespace AutoInvest.Application.Implementation
 {
     public class VehicleService : IVehicleService
     {
-        public Task<VehicleResponseDto> CreateVehicleAsync(string creatorId, VehicleRequestDto vehicleRequestDto)
+
+        private readonly IRepositoryBase<Vehicle> _repositoryBase;
+        private readonly IMapper _mapper;
+        public VehicleService(IRepositoryBase<Vehicle> repositoryBase, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _repositoryBase = repositoryBase;
+            _mapper = mapper;
         }
 
-        public Task DeleteVehicle(string vehicleId)
+
+
+        public async Task<StandardResponse<VehicleResponseDto>> CreateVehicleAsync(string shopId, VehicleRequestDto vehicleRequestDto)
         {
-            throw new NotImplementedException();
+            var vehicle = _mapper.Map<Vehicle>(vehicleRequestDto);
+            await _repositoryBase.CreateAsync(vehicle);
+            await _repositoryBase.SaveChangesAsync();
+            var vehicleResponse = _mapper.Map<VehicleResponseDto>(vehicle);
+            return StandardResponse<VehicleResponseDto>.Succeeded("Vehicle Successfully created", vehicleResponse, 200);
         }
 
-        public Task<IEnumerable<VehicleResponseDto>> GetAllVehicle()
+        public async Task<StandardResponse<string>> DeleteVehicle(string vehicleId)
         {
-            throw new NotImplementedException();
+           var vehicle = await _repositoryBase.FindByCondition(trackChanges:false , expression: x => x.Id == vehicleId).SingleOrDefaultAsync();
+            if (vehicle == null)
+            {
+                return StandardResponse<string>.Failed("Vehicle does not exist", 404);
+            }
+            _repositoryBase.Delete(vehicle);
+            await _repositoryBase.SaveChangesAsync();
+            return StandardResponse<string>.Succeeded("Vehicle deleted successfully", "Success", 200);
         }
 
-        public Task<VehicleResponseDto> GetVehicleById(string vehicleId)
+        public async Task<StandardResponse<IEnumerable<VehicleResponseDto>>> GetAllVehicle()
         {
-            throw new NotImplementedException();
+           var vehicle = await _repositoryBase.FindAll(trackChanges:true).ToListAsync();
+            var vehicleResponse = _mapper.Map<IEnumerable<VehicleResponseDto>>(vehicle);
+            return StandardResponse<IEnumerable<VehicleResponseDto>>.Succeeded("Vehicle successfully retrieved", vehicleResponse, 200);
+         }
+
+        public async Task<StandardResponse<VehicleResponseDto>> GetVehicleById(string vehicleId)
+        {
+            var vehicle = await _repositoryBase.FindByCondition(trackChanges:false , expression: x => x.Id == vehicleId).SingleOrDefaultAsync();
+            if (vehicle == null)
+            {
+                return StandardResponse<VehicleResponseDto>.Failed("Vehicle not found", 404);
+            }
+            var vehicleResponse = _mapper.Map<VehicleResponseDto>(vehicle);
+            return StandardResponse<VehicleResponseDto>.Succeeded("Vehicle successfully retrieved", vehicleResponse, 200);
         }
 
-        public Task UpdateVehicle(VehicleRequestDto vehicleRequestDto)
+        public async Task<StandardResponse<string>> UpdateVehicle( string vehicleId, VehicleRequestDto vehicleRequestDto)
         {
-            throw new NotImplementedException();
+            var vehicle = await _repositoryBase.FindByCondition(trackChanges:false,expression:x => x.Id == vehicleId).SingleOrDefaultAsync();
+            if(vehicle == null)
+            {
+                return StandardResponse<string>.Failed("Vehicle not found", 404);
+
+            }
+            _mapper.Map<VehicleRequestDto>(vehicle);
+            await _repositoryBase.SaveChangesAsync();
+            return StandardResponse<string>.Succeeded("Vehicle successfully updated", "success", 200);
+
+
         }
     }
 }
