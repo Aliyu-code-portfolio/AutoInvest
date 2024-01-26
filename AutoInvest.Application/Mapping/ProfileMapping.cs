@@ -11,6 +11,10 @@ namespace AutoInvest.Application.Mapping
         {
             CreateMap<ShopRequestDto, Shop>();
             CreateMap<Shop, ShopResponseDto>(); 
+            CreateMap<MediaRequestDto, Media>();
+            CreateMap<Media, MediaResponseDto>(); 
+            CreateMap<VehicleRequestDto, Vehicle>();
+            CreateMap<Vehicle, VehicleResponseDto>(); 
         }
     }
 }

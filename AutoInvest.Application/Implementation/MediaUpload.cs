@@ -23,17 +23,14 @@ namespace AutoInvest.Application.Implementation
             var uploadResult = new ImageUploadResult();
             if (file.Length > 0)
             {
-                using (var stream = file.OpenReadStream())
+                using var stream = file.OpenReadStream();
+                var uploadParams = new ImageUploadParams()
                 {
-                    var uploadParams = new ImageUploadParams()
-                    {
-                        File = new FileDescription(file.Name, stream),
-                        /*PublicId = id,
-                        Folder = folder*/
-                    };
-                    uploadResult = _cloudinary.Upload(uploadParams);
-
-                }
+                    File = new FileDescription(file.Name, stream),
+                    /*PublicId = id,
+                    Folder = folder*/
+                };
+                uploadResult = _cloudinary.Upload(uploadParams);
             }
             string url = uploadResult.Url.ToString();
             string publicId = uploadResult.PublicId;
@@ -45,12 +42,12 @@ namespace AutoInvest.Application.Implementation
 
         public string UploadVideo(IFormFile file)
         {
-            var uploadResult = new ImageUploadResult();
+            var uploadResult = new VideoUploadResult();
             if (file.Length > 0)
             {
                 using (var stream = file.OpenReadStream())
                 {
-                    var uploadParams = new ImageUploadParams()
+                    var uploadParams = new VideoUploadParams()
                     {
                         File = new FileDescription(file.Name, stream),
                         /*PublicId = id,
@@ -61,10 +58,6 @@ namespace AutoInvest.Application.Implementation
                 }
             }
             string url = uploadResult.Url.ToString();
-            string publicId = uploadResult.PublicId;
-
-            //check quality of uploaded image
-            CheckQuality(publicId);
             return url;
         }
 

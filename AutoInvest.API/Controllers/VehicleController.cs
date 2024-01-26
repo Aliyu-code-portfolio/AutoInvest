@@ -38,7 +38,7 @@ namespace AutoInvest.API.Controllers
 
         
         [HttpPut("update-vehicle/{Id}")]
-        public async Task<IActionResult> UpdateVehicle(string id, VehicleRequestDto vehicleRequestDto)
+        public async Task<IActionResult> UpdateVehicle(string id,[FromBody] VehicleRequestDto vehicleRequestDto)
         {
             var result = await _vehicleService.UpdateVehicle(id, vehicleRequestDto);
             return StatusCode(result.StatusCode,result);
