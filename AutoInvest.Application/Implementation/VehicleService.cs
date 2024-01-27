@@ -27,9 +27,10 @@ namespace AutoInvest.Application.Implementation
 
 
 
-        public async Task<StandardResponse<VehicleResponseDto>> CreateVehicleAsync(string shopId, VehicleRequestDto vehicleRequestDto)
+        public async Task<StandardResponse<VehicleResponseDto>> CreateVehicleAsync(string creatorId, VehicleRequestDto vehicleRequestDto)
         {
             var vehicle = _mapper.Map<Vehicle>(vehicleRequestDto);
+            vehicle.CreatorId = creatorId;
             await _repositoryBase.CreateAsync(vehicle);
             await _repositoryBase.SaveChangesAsync();
             var vehicleResponse = _mapper.Map<VehicleResponseDto>(vehicle);

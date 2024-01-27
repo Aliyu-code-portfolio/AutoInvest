@@ -28,6 +28,7 @@ namespace AutoInvest.API.Extensions
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IUserService, UserService>();
+           
         }
         
         public static void ConfigureCloudinary(this IServiceCollection services, IConfiguration configuration)
