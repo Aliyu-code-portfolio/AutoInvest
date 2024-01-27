@@ -1,5 +1,6 @@
 ﻿using AutoInvest.Application.Abstraction;
 using AutoInvest.Application.Implementation;
+using AutoInvest.Infrastructure.ExternalAPI;
 using AutoInvest.Infrastructure.Persistent;
 using AutoInvest.Infrastructure.Repository.Abstraction;
 using AutoInvest.Infrastructure.Repository.Implementation;
@@ -28,6 +29,7 @@ namespace AutoInvest.API.Extensions
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPaymentService, PaymentService>();
            
         }
         
@@ -35,6 +37,10 @@ namespace AutoInvest.API.Extensions
         {
             services.Configure<CloudinarySetting>(configuration.GetSection("Cloudinary"));
             services.AddScoped<IMediaUpload, MediaUpload>();
+        }
+        public static void ConfigurePaystackHelper(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<PaystackHelper>();
         }
     }
 }
