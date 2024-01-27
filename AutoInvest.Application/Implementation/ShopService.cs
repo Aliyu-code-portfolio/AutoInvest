@@ -48,7 +48,7 @@ namespace AutoInvest.Application.Implementation
 
         public async Task<StandardResponse<IEnumerable<ShopResponseDto>>> GetAllShop()
         {
-            var shops = await _repositoryBase.FindAll(trackChanges: true).ToListAsync();
+            var shops = await _repositoryBase.FindAll(trackChanges: false).ToListAsync();
             var shopsDtos = _mapper.Map<IEnumerable<ShopResponseDto>>(shops);
             return StandardResponse<IEnumerable<ShopResponseDto>>.Succeeded("Shops retrieved successfully", shopsDtos, 200);
 

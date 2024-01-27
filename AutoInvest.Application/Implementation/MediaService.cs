@@ -41,7 +41,7 @@ namespace AutoInvest.Application.Implementation
 
         public async Task<StandardResponse<IEnumerable<MediaResponseDto>>> GetAllMedia()
         {
-            var media = await _repositoryBase.FindAll(trackChanges: true).ToListAsync();
+            var media = await _repositoryBase.FindAll(trackChanges: false).ToListAsync();
             var mediaDtos = _mapper.Map<IEnumerable<MediaResponseDto>>(media);
             return StandardResponse<IEnumerable<MediaResponseDto>>.Succeeded("Media retrieved successfully", mediaDtos, 200);
         }

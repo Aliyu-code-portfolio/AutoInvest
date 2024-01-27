@@ -70,7 +70,7 @@ namespace AutoInvest.Application.Implementation
 
         public async Task<StandardResponse<string>> UpdateAddress(string addressId, AddressRequestDto addressRequestDto)
         {
-            var address = await _repositoryBase.FindByCondition(trackChanges: false, expression: x => x.Id == addressId).SingleOrDefaultAsync();
+            var address = await _repositoryBase.FindByCondition(trackChanges: true, expression: x => x.Id == addressId).SingleOrDefaultAsync();
            if(address == null)
             {
                 return StandardResponse<string>.Failed("Address not found", 404);

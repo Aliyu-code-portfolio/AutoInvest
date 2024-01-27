@@ -33,7 +33,7 @@ namespace AutoInvest.Application.Implementation
 
         public async Task<StandardResponse<IEnumerable<SalesResponseDto>>> GetAllSales()
         {
-            var sales = await _repositoryBase.FindAll(trackChanges: true).ToListAsync();
+            var sales = await _repositoryBase.FindAll(trackChanges: false).ToListAsync();
             var salesDto = _mapper.Map<IEnumerable<SalesResponseDto>>(sales);
             return StandardResponse<IEnumerable<SalesResponseDto>>.Succeeded("Sales successfuly retrieved", salesDto, 200);
         }
@@ -54,7 +54,7 @@ namespace AutoInvest.Application.Implementation
 
         public async Task<StandardResponse<string>> UpdateSale(string salesId, SaleRequestDto saleRequestDto)
         {
-            var sales = await _repositoryBase.FindByCondition(trackChanges: false, expression: x => x.Id == salesId).SingleOrDefaultAsync();
+            var sales = await _repositoryBase.FindByCondition(trackChanges: true, expression: x => x.Id == salesId).SingleOrDefaultAsync();
             if (sales == null)
             {
                 return StandardResponse<string>.Failed("Sales not found", 404);

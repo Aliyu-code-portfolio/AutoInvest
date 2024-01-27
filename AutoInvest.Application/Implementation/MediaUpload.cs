@@ -45,17 +45,14 @@ namespace AutoInvest.Application.Implementation
             var uploadResult = new VideoUploadResult();
             if (file.Length > 0)
             {
-                using (var stream = file.OpenReadStream())
+                using var stream = file.OpenReadStream();
+                var uploadParams = new VideoUploadParams()
                 {
-                    var uploadParams = new VideoUploadParams()
-                    {
-                        File = new FileDescription(file.Name, stream),
-                        /*PublicId = id,
-                        Folder = folder*/
-                    };
-                    uploadResult = _cloudinary.Upload(uploadParams);
-
-                }
+                    File = new FileDescription(file.Name, stream),
+                    /*PublicId = id,
+                    Folder = folder*/
+                };
+                uploadResult = _cloudinary.Upload(uploadParams);
             }
             string url = uploadResult.Url.ToString();
             return url;

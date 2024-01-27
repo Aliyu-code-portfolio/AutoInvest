@@ -38,14 +38,16 @@ namespace AutoInvest.Application.Implementation
             if (review == null)
             {
                 return StandardResponse<string>.Failed("Review was not found", 404);
+
             }
-            var reviewDto = _mapper.Map<Review>(review);
+            _repositoryBase.Delete(review);
+            await _repositoryBase.SaveChangesAsync();
             return StandardResponse<string>.Succeeded("Review Successfully found", "Success", 200);
         }
 
         public async Task<StandardResponse<IEnumerable<ReviewResponseDto>>> GetAllReview()
         {
-            var review = await _repositoryBase.FindAll(trackChanges: true).ToListAsync();
+            var review = await _repositoryBase.FindAll(trackChanges: false).ToListAsync();
             var reviewDtos = _mapper.Map<IEnumerable<ReviewResponseDto>>(review);
             return StandardResponse<IEnumerable<ReviewResponseDto>>.Succeeded("Review Successfully found", reviewDtos, 200);
         }
@@ -64,7 +66,7 @@ namespace AutoInvest.Application.Implementation
 
         public async Task <StandardResponse<string>> UpdateReview(string reviewId, ReviewRequestDto reviewRequestDto)
         {
-            var review = await _repositoryBase.FindByCondition(trackChanges: false, expression: x => x.Id == reviewId).SingleOrDefaultAsync();
+            var review = await _repositoryBase.FindByCondition(trackChanges: true, expression: x => x.Id == reviewId).SingleOrDefaultAsync();
             if (review == null)
             {
                 return StandardResponse<string>.Failed("Review was not updated", 404);
@@ -73,6 +75,7 @@ namespace AutoInvest.Application.Implementation
             var reviewDto = _mapper.Map(reviewRequestDto, review);
             await _repositoryBase.SaveChangesAsync();
             return StandardResponse<string>.Succeeded("Review was updated successfully", "Sucess", 200);
+            
 
         }
 

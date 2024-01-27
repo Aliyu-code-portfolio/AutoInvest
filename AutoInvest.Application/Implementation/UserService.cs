@@ -39,8 +39,8 @@ namespace AutoInvest.Application.Implementation
 
         public async Task<StandardResponse<IEnumerable<UserResponseDto>>> GetAllRegisterUser()
         {
-            var users = await _repository.FindAll(false).ToListAsync();
-            var usersDtos = _mapper.Map<IEnumerable<UserResponseDto>>(users);
+            var user = await _repository.FindAll(false).ToListAsync();
+            var usersDtos = _mapper.Map<IEnumerable<UserResponseDto>>(user);
             return StandardResponse<IEnumerable<UserResponseDto>>.Succeeded("Request success", usersDtos, 200);
         }
 

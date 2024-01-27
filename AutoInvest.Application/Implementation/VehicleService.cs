@@ -6,11 +6,6 @@ using AutoInvest.Shared.DTO.Response;
 using AutoInvest.Shared.DTO.StandardResponse;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoInvest.Application.Implementation
 {
@@ -51,7 +46,7 @@ namespace AutoInvest.Application.Implementation
 
         public async Task<StandardResponse<IEnumerable<VehicleResponseDto>>> GetAllVehicle()
         {
-           var vehicle = await _repositoryBase.FindAll(trackChanges:true).ToListAsync();
+           var vehicle = await _repositoryBase.FindAll(trackChanges:false).ToListAsync();
             var vehicleResponse = _mapper.Map<IEnumerable<VehicleResponseDto>>(vehicle);
             return StandardResponse<IEnumerable<VehicleResponseDto>>.Succeeded("Vehicle successfully retrieved", vehicleResponse, 200);
          }
@@ -69,7 +64,7 @@ namespace AutoInvest.Application.Implementation
 
         public async Task<StandardResponse<string>> UpdateVehicle( string vehicleId, VehicleRequestDto vehicleRequestDto)
         {
-            var vehicle = await _repositoryBase.FindByCondition(trackChanges:false,expression:x => x.Id == vehicleId).SingleOrDefaultAsync();
+            var vehicle = await _repositoryBase.FindByCondition(trackChanges:true,expression:x => x.Id == vehicleId).SingleOrDefaultAsync();
             if(vehicle == null)
             {
                 return StandardResponse<string>.Failed("Vehicle not found", 404);
