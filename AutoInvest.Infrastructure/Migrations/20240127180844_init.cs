@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AutoInvest.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -134,7 +134,6 @@ namespace AutoInvest.Infrastructure.Migrations
                     KilometerCovered = table.Column<double>(type: "float", nullable: false),
                     Price = table.Column<decimal>(type: "money", nullable: false),
                     ShopId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    MediaId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatorId = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -155,7 +154,7 @@ namespace AutoInvest.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MediaType = table.Column<int>(type: "int", nullable: false),
                     VehicleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),

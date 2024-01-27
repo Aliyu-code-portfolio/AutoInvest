@@ -11,7 +11,6 @@ namespace AutoInvest.Application.Implementation
 {
     public class VehicleService : IVehicleService
     {
-
         private readonly IRepositoryBase<Vehicle> _repositoryBase;
         private readonly IMapper _mapper;
         public VehicleService(IRepositoryBase<Vehicle> repositoryBase, IMapper mapper)
@@ -19,9 +18,6 @@ namespace AutoInvest.Application.Implementation
             _repositoryBase = repositoryBase;
             _mapper = mapper;
         }
-
-
-
         public async Task<StandardResponse<VehicleResponseDto>> CreateVehicleAsync(string creatorId, VehicleRequestDto vehicleRequestDto)
         {
             var vehicle = _mapper.Map<Vehicle>(vehicleRequestDto);
@@ -46,14 +42,15 @@ namespace AutoInvest.Application.Implementation
 
         public async Task<StandardResponse<IEnumerable<VehicleResponseDto>>> GetAllVehicle()
         {
-           var vehicle = await _repositoryBase.FindAll(trackChanges:false).ToListAsync();
+           var vehicle = await _repositoryBase.FindAll(trackChanges:false).Include(v=>v.Medias).ToListAsync();
             var vehicleResponse = _mapper.Map<IEnumerable<VehicleResponseDto>>(vehicle);
             return StandardResponse<IEnumerable<VehicleResponseDto>>.Succeeded("Vehicle successfully retrieved", vehicleResponse, 200);
          }
 
         public async Task<StandardResponse<VehicleResponseDto>> GetVehicleById(string vehicleId)
         {
-            var vehicle = await _repositoryBase.FindByCondition(trackChanges:false , expression: x => x.Id == vehicleId).SingleOrDefaultAsync();
+            var vehicle = await _repositoryBase.FindByCondition(trackChanges:false , expression: x => x.Id == vehicleId).Include(v => v.Medias)
+                .SingleOrDefaultAsync();
             if (vehicle == null)
             {
                 return StandardResponse<VehicleResponseDto>.Failed("Vehicle not found", 404);

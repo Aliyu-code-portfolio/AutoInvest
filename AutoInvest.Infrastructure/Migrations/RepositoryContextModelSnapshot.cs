@@ -319,10 +319,6 @@ namespace AutoInvest.Infrastructure.Migrations
                     b.Property<double>("KilometerCovered")
                         .HasColumnType("float");
 
-                    b.Property<string>("MediaId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Model")
                         .HasColumnType("int");
 

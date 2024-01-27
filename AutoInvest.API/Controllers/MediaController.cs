@@ -46,17 +46,17 @@ namespace AutoInvest.API.Controllers
         }
 
        
-        [HttpPut("update-media/{Id}")]
-        public async Task<IActionResult> UpdateMedia(string Id, [FromBody] MediaRequestDto mediaRequestDto)
+        [HttpPut("update-media/{mediaId}")]
+        public async Task<IActionResult> UpdateMedia(string mediaId, [FromBody] MediaRequestDto mediaRequestDto)
         {
-            var result = await _mediaService.UpdateMedia(Id, mediaRequestDto);
+            var result = await _mediaService.UpdateMedia(mediaId, mediaRequestDto);
             return StatusCode(result.StatusCode, result);
         }
         
-        [HttpPut("upload-media/{Id}")]
-        public async Task<IActionResult> UpdateMedia(string Id, IFormFile file)
+        [HttpPut("upload-media/{mediaId}")]
+        public async Task<IActionResult> UpdateMedia(string mediaId, IFormFile file)
         {
-            var result = await _mediaService.UploadMedia(Id, file);
+            var result = await _mediaService.UploadMedia(mediaId, file);
             return StatusCode(result.StatusCode, result);
         }
 
