@@ -38,6 +38,10 @@ namespace AutoInvest.Application.Implementation
                 {
                     return StandardResponse<InitializePaymentResponseDto>.Failed("Request failed, The request contains invalid saleIds");
                 }
+                if(sale.IsSold)
+                {
+                    return StandardResponse<InitializePaymentResponseDto>.Failed("Request failed, Some sales has already been completed");
+                }
                 totalPaymentAmount += sale.Amount;
                 salesIds += sale.Id+",";
             }

@@ -8,6 +8,6 @@
         public string Access_code { get; set; }
         public string SaleIds { get; set; }
         public decimal Amount { get; set; }
-
+        public bool IsPaid { get; set; }
     }
 }
