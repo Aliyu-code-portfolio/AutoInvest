@@ -31,7 +31,7 @@ namespace AutoInvest.API.Controllers
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpPost("create-shop")]
+        [HttpPost("create-sale")]
         public async Task<IActionResult> CreateSale([FromBody] SaleRequestDto salesRequestDto)
         {
             var creatorId = "1234";
@@ -39,7 +39,7 @@ namespace AutoInvest.API.Controllers
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpPut("update-shop/{Id}")]
+        [HttpPut("update-sale/{Id}")]
         public async Task<IActionResult> UpdateSale(string Id, [FromBody] SaleRequestDto saleRequestDto)
         {
             var result = await _saleService.UpdateSale(Id, saleRequestDto);

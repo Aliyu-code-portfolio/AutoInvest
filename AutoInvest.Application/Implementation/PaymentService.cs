@@ -48,8 +48,8 @@ namespace AutoInvest.Application.Implementation
             var serializedDto = JsonSerializer.Serialize(new
             {
                email = initializePaymentRequestDto.CustomerEmail,
-               amount = totalPaymentAmount
-            });
+               amount = totalPaymentAmount.ToString()+"00"
+            });//addition of kobo not working
             //Implement webhook or callback_url
             InitializePayment paystackResponse;
             var httpContent = new StringContent(serializedDto, Encoding.UTF8, "application/json");

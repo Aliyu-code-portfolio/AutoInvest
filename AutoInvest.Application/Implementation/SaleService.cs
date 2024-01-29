@@ -12,18 +12,26 @@ namespace AutoInvest.Application.Implementation
     public class SaleService : ISaleService
     {
         private readonly IRepositoryBase<Sale> _repositoryBase;
+        private readonly IVehicleService _vehicleService;
         private readonly IMapper _mapper;
 
-        public SaleService(IRepositoryBase<Sale> repositoryBase, IMapper mapper)
+        public SaleService(IRepositoryBase<Sale> repositoryBase,IVehicleService vehicleService, IMapper mapper)
         {
-            this._repositoryBase = repositoryBase;
-            this._mapper = mapper;
+            _repositoryBase = repositoryBase;
+            _vehicleService = vehicleService;
+            _mapper = mapper;
         }
 
         public async Task<StandardResponse<SalesResponseDto>> CreateSaleAsync(string creatorId, SaleRequestDto saleRequestDto)
         {
-
+            var vehicle = await _vehicleService.GetVehicleById(saleRequestDto.VehicleId);
+            if(!vehicle.Success)
+            {
+                return StandardResponse<SalesResponseDto>.Failed("Request failed, vehicle does not exists", 400);
+            }
             var sales = _mapper.Map<Sale>(saleRequestDto);
+            sales.Amount = vehicle.Data.Price;
+            sales.ShopId = vehicle.Data.ShopId;
             sales.CreatorId = creatorId;
             await _repositoryBase.CreateAsync(sales);
             await _repositoryBase.SaveChangesAsync();

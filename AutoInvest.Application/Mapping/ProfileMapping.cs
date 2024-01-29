@@ -17,7 +17,7 @@ namespace AutoInvest.Application.Mapping
             CreateMap<Vehicle, VehicleResponseDto>(); 
             CreateMap<Review,ReviewRequestDto>();
             CreateMap<Review,ReviewResponseDto>();
-            CreateMap<Sale,SaleRequestDto>();
+            CreateMap<SaleRequestDto,Sale>();
             CreateMap<Sale,SalesResponseDto>();
             CreateMap<Address,AddressResponseDto>();
             CreateMap<Address,AddressRequestDto>();
