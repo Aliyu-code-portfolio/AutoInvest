@@ -4,27 +4,65 @@ using AutoInvest.Infrastructure.ExternalAPI;
 using AutoInvest.Infrastructure.Repository.Abstraction;
 using AutoInvest.Shared.DTO.Request;
 using AutoInvest.Shared.DTO.Response;
-using AutoInvest.Shared.DTO.Response.PaystackResponses;
+using AutoInvest.Shared.DTO.Response.PaystackResponses.ConfirmTransaction;
+using AutoInvest.Shared.DTO.Response.PaystackResponses.InitializeTransaction;
 using AutoInvest.Shared.DTO.StandardResponse;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Net.Http;
-using System.Net.Http.Json;
 
 namespace AutoInvest.Application.Implementation
 {
     public class PaymentService : IPaymentService
     {
         private readonly IRepositoryBase<Payment> _paymentRepository;
-        private readonly IRepositoryBase<Sale> _saleRepository;
+        private readonly ISaleService _saleService;
+        private readonly IMapper _mapper;
         private readonly PaystackHelper _paystackHelper;
 
-        public PaymentService(IRepositoryBase<Payment> paymentRepository, IRepositoryBase<Sale> saleRepository, PaystackHelper paystackHelper)
+        public PaymentService(IRepositoryBase<Payment> paymentRepository, PaystackHelper paystackHelper, ISaleService saleService, IMapper mapper)
         {
             _paymentRepository = paymentRepository;
-            _saleRepository = saleRepository;
             _paystackHelper = paystackHelper;
+            _saleService = saleService;
+            _mapper = mapper;
+        }
+
+        public async Task<StandardResponse<string>> ConfirmPayment(string paymentId)
+        {
+            var payment = await _paymentRepository.FindByCondition(x => x.Id == paymentId, true).SingleOrDefaultAsync();
+            if (payment == null)
+            {
+                return StandardResponse<string>.Failed("Request failed", 400);
+            }
+            ConfirmTransaction result;
+            using (HttpResponseMessage responseMessage = await _paystackHelper.PaystackClient.GetAsync($"transaction/verify/{payment.Reference}"))
+            {
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    result = await responseMessage.Content.ReadFromJsonAsync<ConfirmTransaction>(); 
+                }
+                else
+                {
+                    return StandardResponse<string>.Failed("Request failed, Failed to confirm payment");
+                }
+            }
+            if(result.Data.Status== "success")
+            {
+                payment.IsPaid = true;
+                await _paymentRepository.SaveChangesAsync();
+                return StandardResponse<string>.Succeeded("Request successful", string.Empty, 200);
+            }
+            return StandardResponse<string>.Failed($"Request failed, Payment not made yet. Reason: {result.Data.Status}");
+        }
+
+        public async Task<StandardResponse<IEnumerable<PaymentResponseDto>>> GetAllPayment()
+        {
+            var payments = await _paymentRepository.FindAll(false).ToListAsync();
+            var paymentsDtos = _mapper.Map<IEnumerable<PaymentResponseDto>>(payments);
+            return StandardResponse<IEnumerable<PaymentResponseDto>>.Succeeded("Request successful", paymentsDtos, 200);
         }
 
         public async Task<StandardResponse<InitializePaymentResponseDto>> InitializePayment(InitializePaymentRequestDto initializePaymentRequestDto)
@@ -33,8 +71,9 @@ namespace AutoInvest.Application.Implementation
             var salesIds = string.Empty;
             foreach(var saleId in initializePaymentRequestDto.SalesIds)
             {
-                var sale = await _saleRepository.FindByCondition(s => s.Id == saleId, false).SingleOrDefaultAsync();
-                if(sale  == null)
+                var saleResult = await _saleService.GetSalesById(saleId);
+                var sale = saleResult.Data;
+                if(!saleResult.Success)
                 {
                     return StandardResponse<InitializePaymentResponseDto>.Failed("Request failed, The request contains invalid saleIds");
                 }
@@ -45,10 +84,12 @@ namespace AutoInvest.Application.Implementation
                 totalPaymentAmount += sale.Amount;
                 salesIds += sale.Id+",";
             }
+            string paymentId = Guid.NewGuid().ToString();
             var serializedDto = JsonSerializer.Serialize(new
             {
                email = initializePaymentRequestDto.CustomerEmail,
-               amount = totalPaymentAmount.ToString()+"00"
+               amount = totalPaymentAmount.ToString()+"00",
+               callback_url = $"https://localhost:7147/api/payment/confirm-payment/{paymentId}"
             });//addition of kobo not working
             //Implement webhook or callback_url
             InitializePayment paystackResponse;
@@ -67,6 +108,7 @@ namespace AutoInvest.Application.Implementation
             }
             Payment payment = new Payment
             {
+                Id = paymentId,
                 Amount = totalPaymentAmount,
                 SaleIds = salesIds,
                 Access_code = paystackResponse.data.access_code,

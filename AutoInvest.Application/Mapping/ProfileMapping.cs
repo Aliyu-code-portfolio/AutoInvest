@@ -22,6 +22,7 @@ namespace AutoInvest.Application.Mapping
             CreateMap<Address,AddressResponseDto>();
             CreateMap<Address,AddressRequestDto>();
             CreateMap<User,UserResponseDto>();
+            CreateMap<Payment,PaymentResponseDto>();
         }
     }
 }

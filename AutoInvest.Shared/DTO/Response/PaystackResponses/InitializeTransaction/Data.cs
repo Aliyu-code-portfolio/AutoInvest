@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AutoInvest.Shared.DTO.Response.PaystackResponses
+﻿namespace AutoInvest.Shared.DTO.Response.PaystackResponses.InitializeTransaction
 {
     public class Data
     {

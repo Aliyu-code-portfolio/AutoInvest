@@ -17,10 +17,11 @@ namespace AutoInvest.API.Controllers
             _paymentService = paymentService;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("get-all-payments")]
+        public async Task<IActionResult> GetAllPayments()
         {
-            return new string[] { "value1", "value2" };
+            var result = await _paymentService.GetAllPayment();
+            return StatusCode(result.StatusCode, result);
         }
 
         // GET api/<PaymentController>/5
@@ -39,9 +40,11 @@ namespace AutoInvest.API.Controllers
         }
 
         // PUT api/<PaymentController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("confirm-payment/{paymentId}")]
+        public async Task<IActionResult> ConfirmPayment(string paymentId)
         {
+            var result = await _paymentService.ConfirmPayment(paymentId);
+            return StatusCode(result.StatusCode);
         }
 
         // DELETE api/<PaymentController>/5
