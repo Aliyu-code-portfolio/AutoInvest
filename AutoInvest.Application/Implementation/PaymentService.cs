@@ -119,6 +119,7 @@ namespace AutoInvest.Application.Implementation
             await _paymentRepository.SaveChangesAsync();
             var initializeResponseDto = new InitializePaymentResponseDto
             {
+                Id = payment.Id,
                 Amount = totalPaymentAmount,
                 PaymentUrl = payment.Authorization_url
             };

@@ -1,10 +1,12 @@
 ﻿using AutoInvest.Application.Abstraction;
 using AutoInvest.Application.Implementation;
+using AutoInvest.Domain.Models;
 using AutoInvest.Infrastructure.ExternalAPI;
 using AutoInvest.Infrastructure.Persistent;
 using AutoInvest.Infrastructure.Repository.Abstraction;
 using AutoInvest.Infrastructure.Repository.Implementation;
 using AutoInvest.Shared.SettingModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoInvest.API.Extensions
@@ -41,6 +43,24 @@ namespace AutoInvest.API.Extensions
         public static void ConfigurePaystackHelper(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<PaystackHelper>();
+        }
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            services.AddIdentity<User, IdentityRole>(o =>
+            {
+                o.SignIn.RequireConfirmedEmail = true;
+                o.User.RequireUniqueEmail = true;
+                o.Password.RequireDigit = true;
+                o.Password.RequireUppercase = true;
+                o.Password.RequireNonAlphanumeric = true;
+                o.Password.RequiredLength = 8;
+            }).AddEntityFrameworkStores<RepositoryContext>()
+            .AddDefaultTokenProviders();
+        }
+        public static void ConfigureEmailService(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<EmailSetting>(configuration.GetSection("SmtpSettings"));
+            services.AddScoped<IEmailService, EmailService>();
         }
     }
 }

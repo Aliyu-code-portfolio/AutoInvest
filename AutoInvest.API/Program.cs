@@ -12,6 +12,7 @@ builder.Services.ConfigureApplicationServices();
 builder.Services.AddAutoMapper(typeof(ProfileMapping));
 builder.Services.ConfigureCloudinary(builder.Configuration);
 builder.Services.ConfigurePaystackHelper(builder.Configuration);
+builder.Services.ConfigureIdentity();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
