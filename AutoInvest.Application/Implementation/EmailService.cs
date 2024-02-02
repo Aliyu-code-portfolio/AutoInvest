@@ -58,5 +58,7 @@ namespace AutoInvest.Application.Implementation
                 return Task.FromResult(IdentityResult.Failed(identityError));
             }
         }
+
+       
     }
 }

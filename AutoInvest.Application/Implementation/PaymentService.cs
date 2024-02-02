@@ -58,11 +58,34 @@ namespace AutoInvest.Application.Implementation
             return StandardResponse<string>.Failed($"Request failed, Payment not made yet. Reason: {result.Data.Status}");
         }
 
+        public async Task<StandardResponse<string>> DeletePayment(string paymentId)
+        {
+            var payment = await _paymentRepository.FindByCondition(x=>x.Id == paymentId, true).SingleOrDefaultAsync();
+            if (payment == null)
+            {
+                return StandardResponse<string>.Failed("Payment not found", 401);
+            }
+             _paymentRepository.Delete(payment);
+            await _paymentRepository.SaveChangesAsync();
+            return StandardResponse<string>.Succeeded("Payment Deleted", "Deleted", 200);
+        }
+
         public async Task<StandardResponse<IEnumerable<PaymentResponseDto>>> GetAllPayment()
         {
             var payments = await _paymentRepository.FindAll(false).ToListAsync();
             var paymentsDtos = _mapper.Map<IEnumerable<PaymentResponseDto>>(payments);
             return StandardResponse<IEnumerable<PaymentResponseDto>>.Succeeded("Request successful", paymentsDtos, 200);
+        }
+
+        public async Task<StandardResponse<PaymentResponseDto>> GetPaymentById(string paymentId)
+        {
+            var payments = await _paymentRepository.FindByCondition(x=>x.Id==paymentId,false).SingleOrDefaultAsync();
+            var paymentDtos = _mapper.Map<PaymentResponseDto>(payments);
+            if (payments == null)
+            {
+                return StandardResponse<PaymentResponseDto>.Failed("Request failed", paymentDtos, 401);
+            }
+            return StandardResponse<PaymentResponseDto>.Succeeded("Request successful",paymentDtos, 200);
         }
 
         public async Task<StandardResponse<InitializePaymentResponseDto>> InitializePayment(InitializePaymentRequestDto initializePaymentRequestDto)

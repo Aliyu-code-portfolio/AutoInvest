@@ -1,4 +1,5 @@
 ﻿using AutoInvest.Application.Abstraction;
+using AutoInvest.Application.Implementation;
 using AutoInvest.Shared.DTO.Request;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,11 +25,11 @@ namespace AutoInvest.API.Controllers
             return StatusCode(result.StatusCode, result);
         }
 
-        // GET api/<PaymentController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("get-payment-by-id/{id}")]
+        public async Task<IActionResult> GetPaymentById(string id)
         {
-            return "value";
+            var result = await _paymentService.GetPaymentById(id);
+            return StatusCode(result.StatusCode, result);
         }
 
         // POST api/<PaymentController>
@@ -48,9 +49,11 @@ namespace AutoInvest.API.Controllers
         }
 
         // DELETE api/<PaymentController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("delete-payment/{id}")]
+        public async Task<IActionResult> DeletePaymentById(string id)
         {
+            var result = await _paymentService.DeletePayment(id);
+            return StatusCode(result.StatusCode, result);
         }
     }
 }
