@@ -14,6 +14,8 @@ builder.Services.ConfigureCloudinary(builder.Configuration);
 builder.Services.ConfigurePaystackHelper(builder.Configuration);
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureEmailService(builder.Configuration);
+builder.Services.ConfigureJWT(builder.Configuration);
+builder.Services.ConfigureTokenService();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

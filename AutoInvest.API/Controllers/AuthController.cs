@@ -1,5 +1,6 @@
 ﻿using AutoInvest.Application.Abstraction;
 using AutoInvest.Shared.DTO.Request;
+using AutoInvest.Shared.Util;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,15 +22,33 @@ namespace AutoInvest.API.Controllers
         [HttpPost("sign-up")]
         public async Task<IActionResult> Signup([FromBody] RegisterUserDto registerUserDto)
         {
-            var result = await _authService.RegisterUser(registerUserDto);
+            var result = await _authService.RegisterUser(registerUserDto, Request);
+            return StatusCode(result.StatusCode, result);
+        }
+        
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
+        {
+            var result = await _authService.LoginUser(loginRequestDto);
             return StatusCode(result.StatusCode, result);
         }
 
 
         // PUT api/<AuthController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpGet("confirm-email/{email}/{token}")]
+        public async Task<ContentResult> ConfirmEmail(string email, string token)
         {
+            var result = await _authService.ConfirmEmail(email, token);
+            return result.Success ? new ContentResult
+            {
+                Content = EmailSuccessLogo.htmlVerified,
+                ContentType = "text/html"
+            } :
+             new ContentResult
+             {
+                 Content = EmailSuccessLogo.htmlFailed,
+                 ContentType = "text/html"
+             };
         }
 
         // DELETE api/<AuthController>/5

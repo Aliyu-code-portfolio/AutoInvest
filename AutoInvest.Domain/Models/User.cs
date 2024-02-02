@@ -10,10 +10,7 @@ namespace AutoInvest.Domain.Models
         public UserType UserType { get; set; }
         public string NIN { get; set; }
         public bool IsVerified { get; set; }
-        public string AddressId { get; set; } = "";
+        public string? AddressId { get; set; } 
         public virtual Address? Address { get; set; }
-       
-
-        // need review, payment, sale, Media, Delivery, referral models to the project
     }
 }

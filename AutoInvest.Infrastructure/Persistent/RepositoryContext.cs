@@ -1,9 +1,11 @@
 ﻿using AutoInvest.Domain.Models;
+using AutoInvest.Infrastructure.Config;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoInvest.Infrastructure.Persistent
 {
-    public class RepositoryContext:DbContext
+    public class RepositoryContext:IdentityDbContext<User>
     {
         public RepositoryContext(DbContextOptions<RepositoryContext> options):base(options)
         {
@@ -12,6 +14,12 @@ namespace AutoInvest.Infrastructure.Persistent
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
             configurationBuilder.Properties<Decimal>().HaveColumnType("money");
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new RolesConfig());
+            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
