@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoInvest.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,6 @@ namespace AutoInvest.Shared.DTO.Request
         public string Email { get; init; }
         public string NIN { get; init; }
         public string Password { get; init; }
+        public UserType RegistrationType { get; set; }
     }
 }

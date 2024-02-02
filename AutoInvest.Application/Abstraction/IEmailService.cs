@@ -1,7 +1,9 @@
-﻿namespace AutoInvest.Application.Abstraction
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace AutoInvest.Application.Abstraction
 {
     public interface IEmailService
     {
-        void SendEmail(string receiverEmail, string subject, string body);
+        Task<IdentityResult> SendEmail(string receiverEmail, string subject, string body);
     }
 }

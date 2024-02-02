@@ -9,6 +9,7 @@ namespace AutoInvest.Application.Mapping
     {
         public ProfileMapping()
         {
+            CreateMap<RegisterUserDto, User>();
             CreateMap<ShopRequestDto, Shop>();
             CreateMap<Shop, ShopResponseDto>(); 
             CreateMap<MediaRequestDto, Media>();

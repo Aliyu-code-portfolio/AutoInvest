@@ -24,6 +24,7 @@ namespace AutoInvest.API.Extensions
         }
         public static void ConfigureApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IShopService, ShopService>();
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IReviewService, ReviewService>();
