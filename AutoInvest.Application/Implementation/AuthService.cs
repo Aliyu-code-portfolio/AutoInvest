@@ -92,5 +92,24 @@ namespace AutoInvest.Application.Implementation
             var token = await _tokenService.CreateToken(user);
             return StandardResponse<string>.Succeeded("Login successful", token, 200);
         }
+
+        public async Task<StandardResponse<string>> ForgetPassword(string email)
+        {
+            var user =await _userManager.FindByEmailAsync(email);
+            if(user is null)
+            {
+                return StandardResponse<string>.Failed("Invalid credentials");
+            }
+            var token =await _userManager.GeneratePasswordResetTokenAsync(user);
+            var tokenAsByte = System.Text.Encoding.UTF8.GetBytes(token);
+            var tokenIn64String = Convert.ToBase64String(tokenAsByte);
+            var callback_url = $"autoinvest.com/reset-password/{user.Email}/{tokenIn64String}";
+            var emailResult = await _emailService.SendEmail(user.Email, "Password Reset: AutoInvest", $"We are sending this email to reset your account password. {callback_url}");
+            if (!emailResult.Succeeded)
+            {
+                return StandardResponse<string>.Failed("Request failed. email not sent", 400);
+            }
+            return StandardResponse<string>.Succeeded("Request successful", string.Empty, 200);
+        }
     }
 }

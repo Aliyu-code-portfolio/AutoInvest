@@ -51,10 +51,11 @@ namespace AutoInvest.API.Controllers
              };
         }
 
-        // DELETE api/<AuthController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPost("forget-password/{email}")]
+        public async Task<IActionResult> ForgetPassword(string email)
         {
+            var result = await _authService.ForgetPassword(email);
+            return StatusCode(result.StatusCode, result);
         }
     }
 }

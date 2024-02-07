@@ -10,5 +10,6 @@ namespace AutoInvest.Application.Abstraction
         Task<StandardResponse<IdentityResult>> RegisterUser(RegisterUserDto registerUserDto, HttpRequest httpRequest);
         Task<StandardResponse<IdentityResult>> ConfirmEmail(string email, string tokenIn64String);
         Task<StandardResponse<string>> LoginUser(LoginRequestDto loginRequestDto);
+        Task<StandardResponse<string>> ForgetPassword(string email);
     }
 }
